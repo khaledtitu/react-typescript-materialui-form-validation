@@ -1,10 +1,15 @@
 ## react-typescript-materialui-form-validation
-Simple React typecript Form With validation. I will use material ui, Formik and yap   
+Simple React typecript Form With validation. I have used material ui, Formik and yup   
 
 
 ## Available Scripts
 
+For instalation run:  
+
+### `yarn install`
+
 In the project directory, you can run:
+
 
 ### `yarn start`
 
