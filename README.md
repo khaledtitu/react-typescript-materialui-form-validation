@@ -4,6 +4,10 @@ Simple React typecript Form With validation. I have used material ui, Formik and
 
 ## Available Scripts
 
+<div align="center">
+    <img src="https://testanimation2000.000webhostapp.com/img/picOfForm.PNG" width="400px"</img> 
+</div>
+
 For instalation run:  
 
 ### `yarn install`
