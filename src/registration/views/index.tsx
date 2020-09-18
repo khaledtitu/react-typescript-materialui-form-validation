@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import clsx from 'clsx';
@@ -11,11 +10,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Container from '@material-ui/core/Container';
-import { Formik, Form, FormikProps } from 'formik'
-import * as Yup from 'yup'
+import {FormValues, FormIStatus, FormIStatusProps} from '../types/registration';
+import { Formik, Form, FormikProps } from 'formik';
+import {validationRules} from  '../validation';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,38 +47,26 @@ const useStyles = makeStyles((theme: Theme) =>
     submitButton: {
         marginTop: '24px',
     },
+    buttonStyle: {
+        marginLeft:'25px',
+    },
     title: { textAlign: 'center' },
     successMessage: { color: 'green' },
     errorMessage: { color: 'red' },
   }),
 );
-interface FormValues {
-    firstName: string;
-    lastName: string;
-    email: string;
-    gender: string;
-}
+
 const initialFValues: FormValues = {
     firstName: '',
     lastName: '',
     email: '',
     gender: '',
 }
-interface FormIStatus {
-    message: string
-    type: string
-}
-interface FormIStatusProps {
-    [key: string]: FormIStatus
-}
+
 const formStatusProps: FormIStatusProps  = {
     success: {
         message: 'Created successfully.',
         type: 'success',
-    },
-    otherError: {
-        message: 'User Already Exist ',
-        type: 'error',
     },
     error: {
         message: 'Something went wrong. Please try again.',
@@ -101,19 +88,12 @@ const RegistrationForm: React.FC= () =>  {
             }
         } catch (error) {
             const response = error.response
-            if (
-                response.status === 400
-            ) {
-                setFormStatus(formStatusProps.otherError)
-            } else {
-                setFormStatus(formStatusProps.error)
-            }
+            setFormStatus(formStatusProps.error)
 
         } finally {
             setDisplayFormStatus(true)
         }
     }
-    const [values, setValues] = useState(initialFValues);
     return (
       <Container maxWidth="md">
         <Grid container>
@@ -123,19 +103,7 @@ const RegistrationForm: React.FC= () =>  {
                     createNewUser(values, actions.resetForm)
                      actions.setSubmitting(false)
                 }}
-                validationSchema={Yup.object().shape({
-                    firstName: Yup.string()
-                      .required('First name is required')
-                      .min(2, 'Min length: 2'),
-                    lastName: Yup.string()
-                      .required('Last Name is required')
-                      .min(2, 'Min length: 2'),                
-                    email: Yup.string()
-                        .email('please Enter valid Email Address')
-                        .required('Email address is required'),
-                    gender: Yup.string()
-                        .required('Gender Field is required'),
-                })}
+                validationSchema={validationRules}
             >
                 {(props: FormikProps<FormValues>) => {
                     const {
@@ -147,9 +115,7 @@ const RegistrationForm: React.FC= () =>  {
                         isSubmitting,
                     } = props
                     return (
-
                         <Card>
-
                               <h1 className={classes.center}>React Typescript Registration Form </h1>
                               <Form className={classes.root} noValidate autoComplete="off">
                                 <Grid container spacing={3}>
@@ -202,7 +168,7 @@ const RegistrationForm: React.FC= () =>  {
                                       />
                                       <TextField 
                                             id="lastName" 
-                                            label="last Name" 
+                                            label="Last Name" 
                                             name='lastName'
                                             variant="outlined" 
                                             value={values.lastName}
@@ -223,7 +189,7 @@ const RegistrationForm: React.FC= () =>  {
                                       <TextField 
                                           id="email" 
                                           name="email"
-                                          label="Email" 
+                                          label="Email Address" 
                                           variant="outlined" 
                                           value={values.email}
                                           className={clsx(classes.margin, classes.textField)}
@@ -240,7 +206,6 @@ const RegistrationForm: React.FC= () =>  {
                                           onChange={handleChange}
                                           onBlur={handleBlur}
                                       />
-
 
                                         <div>
                                             <FormControl component="fieldset" className={classes.FormControl}>
@@ -296,6 +261,7 @@ const RegistrationForm: React.FC= () =>  {
                                     className={classes.submitButton}
                                 >
                                     <Button
+                                        className={classes.buttonStyle}
                                         type="submit"
                                         variant="contained"
                                         color="secondary"
