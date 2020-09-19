@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import RegistrationForm from './registration/views/index';
 import * as serviceWorker from './serviceWorker';
 
